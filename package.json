@@ -1,0 +1,60 @@
+{
+    "name": "wollok-server",
+    "version": "1.0.0",
+    "description": "Wollok server api.",
+    "main": "server.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "startLocal": "cd dist && node server.js",
+      "watch": "nodemon start",
+      "build": "sh build.sh",
+      "start": "npm run build  && node ./dist/server.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/nnydjesus/wollok-server.git"
+    },
+    "keywords": [
+      "API",
+      "REST",
+      "wollok"
+    ],
+    "author": "Ronny De Jesus <nnydjesus@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+      "@octokit/rest": "^15.9.5",
+      "@sendgrid/mail": "^6.3.1",
+      "async": "^2.6.0",
+      "axios": "^0.17.1",
+      "body-parser": "^1.18.2",
+      "compression": "^1.7.1",
+      "cors": "^2.8.4",
+      "dotenv": "^5.0.0",
+      "ejs": "^2.5.7",
+      "express": "^4.16.2",
+      "express-jwt": "^5.3.0",
+      "express-winston": "^2.6.0",
+      "fs-extra": "^7.0.0",
+      "jsonwebtoken": "^8.3.0",
+      "mongoose": "^5.0.4",
+      "mongoose-bcrypt": "^1.5.0",
+      "mongoose-string-query": "^0.2.5",
+      "mongoose-timestamp": "^0.6.0",
+      "serve-favicon": "^2.4.5",
+      "validator": "^9.4.0",
+      "winston": "^2.4.0",
+      "winston-papertrail": "^1.0.5"
+    },
+    "devDependencies": {
+      "babel": "^6.23.0",
+      "babel-cli": "^6.26.0",
+      "babel-core": "^6.26.0",
+      "babel-plugin-transform-regenerator": "^6.26.0",
+      "babel-polyfill": "^6.26.0",
+      "babel-preset-env": "^1.7.0",
+      "babel-preset-stage-2": "^6.24.1",
+      "prettier": "^1.10.2",
+      "prettierrc": "^0.0.0-5"
+    }
+  }
+  
