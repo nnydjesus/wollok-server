@@ -96,6 +96,9 @@ exports.signin = (req, res) => {
 	
 	User.findOne({ email: email })
 	.then(user => {
+		if(user == undefined){
+			res.status(401).json({id:"invalidCredentials"});
+		}
 		user.verifyPassword(password).then(function(valid) {
 			if (valid) {
 				const token = jwt.sign({ email: user.email, id: user._id, name:user.name }, config.jwt.secret, { expiresIn: 86400 });
@@ -105,16 +108,16 @@ exports.signin = (req, res) => {
 					token: token
 				});
 			} else {
-				res.status(401).json({error:"invalidCredentials"});
+				res.status(401).json({id:"invalidCredentials"});
 			}
 		}).catch(function(err) {
 			logger.error(err);
-			res.status(401).json({error:"invalidCredentials"});
+			res.status(401).json({id:"invalidCredentials"});
 		});
 	})
 	.catch(err => {
 		logger.error(err);
-		res.status(401).json({error:"invalidCredentials"});
+		res.status(401).json({id:"invalidCredentials"});
 	});
 };
 
