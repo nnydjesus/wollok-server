@@ -15,7 +15,7 @@ export default {
 	github:{
 		token: process.env.GITHUB_TOKEN,
 		clientId: process.env.GITHUB_CLIENT_ID,
-		secret: process.env.  GITHUB_SECRET
+		secret: process.env.GITHUB_SECRET
 	},
 	email: {
 		sender: {
@@ -39,5 +39,13 @@ export default {
 	},
 	database:{
 		uri: process.env.MONGO_URI
+	},
+	facebook:{
+		appId: process.env.FACEBOOK_APP_ID,
+		secret: process.env.FACEBOOK_SECRET
+	},
+	google:{
+		clientId: process.env.GOOGLE_CLIENT_ID,
+		secret: process.env.GOOGLE_CLIENT_SECRET
 	}
 };

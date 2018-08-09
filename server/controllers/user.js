@@ -1,9 +1,9 @@
 import validator from 'validator';
-import jwt from 'jsonwebtoken';
 import config from '../config'
 import User from '../models/user';
 import repo from '../utils/repo'
 import logger from '../utils/logger';
+import generateToken from '../utils/token';
 import fs from 'fs';
 
 exports.list = (req, res) => {
@@ -71,11 +71,7 @@ exports.post = (req, res) => {
 	
 	User.create(data)
 		.then(user => {
-			repo.createUserFolder(user).then(()=> {} )
-
-			const token = jwt.sign({ email: user.email, id: user._id, name:user.name }, config.jwt.secret, {
-				expiresIn: 86400
-			});
+			const token = generateToken(user);
 			
 			res.json({
 				email: user.email,
@@ -101,7 +97,7 @@ exports.signin = (req, res) => {
 		}
 		user.verifyPassword(password).then(function(valid) {
 			if (valid) {
-				const token = jwt.sign({ email: user.email, id: user._id, name:user.name }, config.jwt.secret, { expiresIn: 86400 });
+				const token = token(user);
 				res.json({
 					name: user.name,
 					id: user._id,
@@ -137,5 +133,19 @@ exports.delete = (req, res) => {
 	}).catch(err => {
 		logger.error(err);
 		res.status(422).send(err.errors);
+	});
+};
+
+
+exports.social = (req, res) => {
+	var user = req.user
+	if(user == undefined){
+		res.status(401).json({id:"invalidCredentials"});
+	}
+	const token = generateToken(user);
+	res.json({
+		name: user.name,
+		id: user._id,
+		token: token
 	});
 };

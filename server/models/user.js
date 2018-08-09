@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'mongoose-bcrypt';
 import timestamps from 'mongoose-timestamp';
 import mongooseStringQuery from 'mongoose-string-query';
+import repo from '../utils/repo';
 
 import logger from '../utils/logger';
 import email from '../utils/email';
@@ -20,6 +21,27 @@ export const UserSchema = new Schema(
 			type: String,
 			required: true,
 			bcrypt: true
+		},
+		facebookProvider: {
+            type: {
+                id: String,
+                token: String
+            },
+            select: false
+		},
+		googleProvider: {
+            type: {
+                id: String,
+                token: String
+            },
+            select: false
+		},
+		githubProvider: {
+            type: {
+                id: String,
+                token: String
+            },
+            select: false
 		},
 		name: {
 			type: String,
@@ -47,6 +69,8 @@ UserSchema.pre('save', function(next) {
 	if (!this.isNew) {
 		next();
 	}
+
+	repo.createUserFolder(this).then(()=> {} )
 
 	email({
 		type: 'welcome',
@@ -79,6 +103,38 @@ UserSchema.pre('findOneAndUpdate', function(next) {
 			next();
 		});
 });
+
+UserSchema.statics.upsertSocialUser = function(provider, accessToken, refreshToken, profile, cb) {
+	var that = this;  
+	var providerId= provider+'.id'
+	return this.findOne({
+		[providerId]: profile.id
+	}).then(user => {
+		// no user was found, lets create a new one
+		if (!user) {
+			var newUser = new that({
+				name: profile.displayName,
+				email: profile.emails[0].value,
+				password: accessToken,
+				[provider]: {
+					id: profile.id,
+					token: accessToken
+				}
+			});
+
+			return newUser.save()
+				.then(userSaved => cb(undefined, userSaved))
+				.catch(err => {
+					logger.error(err);
+					cb(err, newUser)
+				});
+		}
+		return cb(undefined, user);
+	}).catch(err => {
+		logger.error(err);
+		cb(err, undefined)
+	});
+};
 
 UserSchema.plugin(bcrypt);
 UserSchema.plugin(timestamps);

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import ejs from 'ejs';
 import sendgrid from '@sendgrid/mail';
-
+import path from 'path';
 import logger from '../logger';
 import config from '../../config';
 
@@ -24,7 +24,7 @@ const email = data => {
 
 		if (type === 'welcome') {
 			const msg = ejs.render(
-				fs.readFileSync('resources/email/templates/welcome.ejs', 'utf8'),
+				fs.readFileSync(__dirname+'/../../resources/email/templates/welcome.ejs', 'utf8'),
 			);
 
 			const obj = {
@@ -33,7 +33,7 @@ const email = data => {
 					name: config.email.sender.default.name,
 					email: config.email.sender.default.email,
 				},
-				subject: 'Welcome to Winds!',
+				subject: 'Bienvenido a Wollok Web!',
 				content: [
 					{
 						type: 'text/html',
