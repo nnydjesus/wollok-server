@@ -68,22 +68,30 @@ exports.put = (req, res) => {
 
 exports.post = (req, res) => {
 	const data = req.body;
+
+	User.findOne({ email: data.email }).then(user => {
+		if(user == undefined){
+			return User.create(data)
+			.then(user => {
+				const token = generateToken(user);
+				
+				res.json({
+					email: user.email,
+					name: user.name,
+					id: user._id,
+					token: token
+				});
+			})
+			.catch(err => {
+				logger.error(err);
+				res.status(500).send(err);
+			})
+		}else{
+			res.status(400).json({id:"userAlreadyExist"});
+		}
+	})
 	
-	User.create(data)
-		.then(user => {
-			const token = generateToken(user);
-			
-			res.json({
-				email: user.email,
-				name: user.name,
-				id: user._id,
-				token: token
-			});
-		})
-		.catch(err => {
-			logger.error(err);
-			res.status(500).send(err);
-		});
+
 };
 
 exports.signin = (req, res) => {
