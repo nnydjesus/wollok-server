@@ -21,11 +21,7 @@ api.use(bodyParser.json());
 api.use(
 	jwt({ secret: config.jwt.secret }).unless({
 		path: [
-			'/auth/signup',
-			'/auth/signin',
-			'/auth/facebook',
-			'/auth/google',
-			'/auth/github'
+			/(\/auth\/)(\w|\/)+/
 		]
 	})
 );

@@ -15,7 +15,8 @@ export default {
 	github:{
 		token: process.env.GITHUB_TOKEN,
 		clientId: process.env.GITHUB_CLIENT_ID,
-		secret: process.env.GITHUB_SECRET
+		secret: process.env.GITHUB_SECRET,
+		callback: process.env.GITHUB_CALLBACK,
 	},
 	email: {
 		sender: {

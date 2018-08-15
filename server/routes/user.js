@@ -14,5 +14,7 @@ module.exports = api => {
 	api.route('/auth/signin').post(User.signin);
 	api.route('/auth/facebook').post(passport.authenticate('facebook-token', {session: false}), User.social);
 	api.route('/auth/google').post(passport.authenticate('google-token', {session: false}), User.social);
-	api.route('/auth/github').post(passport.authenticate('github-token', {session: false}), User.social);
+	api.route('/auth/github').post(passport.authenticate('github', {session: false}), User.social);
+	api.route('/auth/github/authenticate').get(passport.authenticate('github', {session: false}), User.social);
+	
 };

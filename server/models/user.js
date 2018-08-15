@@ -105,6 +105,7 @@ UserSchema.pre('findOneAndUpdate', function(next) {
 });
 
 UserSchema.statics.upsertSocialUser = function(provider, accessToken, refreshToken, profile, cb) {
+	console.log(profile)
 	var that = this;  
 	var providerId= provider+'.id'
 	return this.findOne({
@@ -113,8 +114,8 @@ UserSchema.statics.upsertSocialUser = function(provider, accessToken, refreshTok
 		// no user was found, lets create a new one
 		if (!user) {
 			var newUser = new that({
-				name: profile.displayName,
-				email: profile.emails[0].value,
+				name: profile.displayName||profile.username,
+				email: profile.emails?profile.emails[0].value : profile.username,
 				password: accessToken,
 				[provider]: {
 					id: profile.id,

@@ -1,7 +1,7 @@
 import passport  from 'passport';
 import FacebookTokenStrategy from 'passport-facebook-token';
 import {Strategy as GoogleTokenStrategy} from 'passport-google-token';
-import GitHubTokenStrategy from 'passport-github-token';
+import GitHubStrategy from 'passport-github';
 import config from '../../config';
 import logger from '../logger';
 import User from '../../models/user';
@@ -26,9 +26,10 @@ passport.use(new GoogleTokenStrategy({
     })
 );
 
-passport.use(new GitHubTokenStrategy({
+passport.use(new GitHubStrategy({
         clientID: config.github.clientId,
-        clientSecret: config.github.secret
+        clientSecret: config.github.secret,
+        callbackURL: config.github.callback,
     },
     function (accessToken, refreshToken, profile, done) {
         User.upsertSocialUser('githubProvider', accessToken, refreshToken, profile, (err, user) => done(err, user) )
